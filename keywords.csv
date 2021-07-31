@@ -1,0 +1,11 @@
+machine-learning,R language,Python,NLP,Data Engineering
+Data Visualization,tidyr,plotly,Spacy,aws
+Predictive Analysis,ggplot2,NumPy,gensim,ec2
+Statistical Modeling,ggraph,SciPy,Pykaret,redshift
+Data Mining,dplyr,Scikit-learn,NLTK,ETL
+Clustering & Classification,tidyquant,TensorFlow,TextBlob,hadoop
+Data Analytics,dygraphs,Keras,CoreNLP,hive
+Quantitative Analysis,leaflet,PyTorch,,docker
+Web Scraping,ggmap,Matplotlib,,kubernetes
+ML Algorithms,glue,Pandas,,
+Model Development,plotly,,,
