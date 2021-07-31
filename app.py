@@ -1,5 +1,4 @@
-# import PyPDF2
-from pdfminer.high_level import extract_text
+import PyPDF2
 import os
 from os import listdir
 from os.path import isfile, join
@@ -10,13 +9,20 @@ import en_core_web_sm
 nlp = en_core_web_sm.load()
 from spacy.matcher import PhraseMatcher
 
-mypath='./' #enter your path here where you saved the resumes
+mypath='./resumes' #enter your path here where you saved the resumes
 onlyfiles = [os.path.join(mypath, f) for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
 
 def pdfextract(file):
-
-    text = extract_text(file)
-
+    fileReader = PyPDF2.PdfFileReader(open(file,'rb'))
+    countpage = fileReader.getNumPages()
+    count = 0
+    text = []
+    while count < countpage:    
+        pageObj = fileReader.getPage(count)
+        count +=1
+        t = pageObj.extractText()
+        print (t)
+        text.append(t)
     return text
 
 def create_profile(file):
@@ -31,7 +37,6 @@ def create_profile(file):
     R_words = [nlp(text) for text in keyword_dict['R language'].dropna(axis = 0)]
     python_words = [nlp(text) for text in keyword_dict['Python'].dropna(axis = 0)]
     Data_Engineering_words = [nlp(text) for text in keyword_dict['Data Engineering'].dropna(axis = 0)]
-
     matcher = PhraseMatcher(nlp.vocab)
     matcher.add('NLP', None, *NLP_words)
     matcher.add('ML', None, *ML_words)
@@ -90,22 +95,4 @@ final_database2.reset_index(inplace = True)
 final_database2.fillna(0,inplace=True)
 new_data = final_database2.iloc[:,1:]
 new_data.index = final_database2['Candidate Name']
-#execute the below line if you want to see the candidate profile in a csv format
-#sample2=new_data.to_csv('sample.csv')
-import matplotlib.pyplot as plt
-plt.rcParams.update({'font.size': 10})
-ax = new_data.plot.barh(title="Resume keywords by category", legend=False, figsize=(25,7), stacked=True)
-labels = []
-for j in new_data.columns:
-    for i in new_data.index:
-        label = str(j)+": " + str(new_data.loc[i][j])
-        labels.append(label)
-patches = ax.patches
-for label, rect in zip(labels, patches):
-    width = rect.get_width()
-    if width > 0:
-        x = rect.get_x()
-        y = rect.get_y()
-        height = rect.get_height()
-        ax.text(x + width/2., y + height/2., label, ha='center', va='center')
-plt.show()
+# new_data.to_csv('sample.csv')
